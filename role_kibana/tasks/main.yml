@@ -30,12 +30,12 @@
 
 
 # set Kibana as a service
-- name: start Kibana. 
+- name: set Kibana as a service
   shell: update-rc.d kibana defaults
   become: true
 
 
 # start Kibana
 - name: start Kibana
-  shell: nohup service kibana start &
+  shell: nohup service kibana start > /root/start_kibana.log 2>&1 &
   become: true
