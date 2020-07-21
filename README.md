@@ -94,13 +94,13 @@ ansible 2.9.10 with python version = 2.7.17</p>
 </p>
 <p style="margin-bottom: 0cm; line-height: 100%">Docker containers&nbsp;:
 </p>
-<p style="margin-bottom: 0cm; line-height: 100%">Elasticsearch&nbsp;:
+<p style="margin-bottom: 0cm; line-height: 100%">Elasticsearch&nbsp;: 7.8.0
 </p>
 <p style="margin-bottom: 0cm; line-height: 100%">Nginx&nbsp;: 
 </p>
-<p style="margin-bottom: 0cm; line-height: 100%">Logstash&nbsp;: 
+<p style="margin-bottom: 0cm; line-height: 100%">Logstash&nbsp;: 7.8.0
 </p>
-<p style="margin-bottom: 0cm; line-height: 100%">kibana&nbsp;: 
+<p style="margin-bottom: 0cm; line-height: 100%">kibana&nbsp;: 7.8.0
 </p>
 <p style="margin-bottom: 0cm; line-height: 100%"><br/>
 
