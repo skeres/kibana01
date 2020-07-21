@@ -1,0 +1,34 @@
+---
+
+- hosts: localhost
+
+  pre_tasks:
+          - shell: echo 'no tasks to run before roles'
+
+  roles:
+    - { role: role_container }
+
+  tasks:
+    - shell: echo 'no tasks to run after roles'
+
+  post_tasks:
+    - shell: echo 'ansible jobs ended'
+
+
+- hosts: elastic_group
+  roles:
+    - { role: role_prerequisites }
+    - { role: role_elasticsearch }
+   
+
+- hosts: nginx_group
+  roles:
+    - { role: role_prerequisites }
+    - { role: role_nginx }
+    - { role: role_logstash }
+
+
+- hosts: kibana_group
+  roles:
+    - { role: role_prerequisites }
+    - { role: role_kibana }

@@ -1,0 +1,41 @@
+---
+# tasks file for role_kibana
+
+
+- name: install Kibana
+  apt:
+    name: kibana
+    state: latest
+    update_cache: yes
+  become : true
+
+
+# set custom file with link to elasticsearch server
+- name: update kibana config file => server.host
+  lineinfile:
+    path: /etc/kibana/kibana.yml
+    insertafter: '^#server.host'
+    line: 'server.host: "172.3.27.19"'
+  become: true
+
+
+# set custom file with link to elasticsearch server
+- name: update kibana config file => server.host
+  lineinfile:
+    path: /etc/kibana/kibana.yml
+    insertafter: '^#elasticsearch.hosts'
+    line: 'elasticsearch.hosts: ["http://172.3.27.10:9200"]'
+  become: true
+
+
+
+# set Kibana as a service
+- name: start Kibana. 
+  shell: update-rc.d kibana defaults
+  become: true
+
+
+# start Kibana
+- name: start Kibana
+  shell: nohup service kibana start &
+  become: true

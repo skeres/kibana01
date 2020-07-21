@@ -1,0 +1,50 @@
+---
+# tasks file for role_nginx
+
+- name: install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  become: true
+
+
+# create custom directory to store nginx logs
+- name: Create a directory for logs
+  file:
+    path: /home/ugeek/
+    state: directory
+    mode: '0755'
+  become_user : ugeek
+
+
+# create custom file to store nginx logs
+- name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+  file:
+    path: /home/ugeek/access_log
+    state: touch
+    mode: u=rwx,g=rw,o=rw
+  become_user : ugeek
+
+
+# specify custom log file created above in nginx config 
+- name: update nginx config file
+  lineinfile:
+    path: /etc/nginx/sites-enabled/default
+    insertafter: '^server {'
+    line: '       access_log /home/ugeek/access_log;'
+  become: true
+
+
+# set nginx as a service
+- name: start Nginx. Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
+  shell: update-rc.d nginx defaults
+  become: true
+
+
+# start Nginx
+- name: start Nginx
+  shell: nohup service nginx start &
+  become: true
+
+  

@@ -1,0 +1,64 @@
+---
+# tasks file for role_elasticsearch
+#
+
+- name: Install Elasticsearch.
+  package:
+    name: elasticsearch
+    state: present
+  become: true
+
+
+# You can use localhost instead of 0.0.0.0 for a safe configuration
+- name: sets for ES => network.host to 0.0.0.0
+  replace:
+    path: /etc/elasticsearch/elasticsearch.yml 
+    regexp: '^#network.host: 192.168.0.1'
+    replace: 'network.host: 0.0.0.0'
+    backup: yes
+  become: true
+  
+
+# you don't need this step if you set value network.host to localhost above
+- name: set for ES => discovery.seed_hosts to empty. 
+  lineinfile:
+    path: /etc/elasticsearch/elasticsearch.yml
+    insertafter: '^#discovery.seed_hosts'
+    line: 'discovery.seed_hosts: []'
+  become: true
+
+
+# you don't need this step if you set value network.host to localhost above
+- name: set for ES => discovery.type to single-node
+  lineinfile:
+    path: /etc/elasticsearch/elasticsearch.yml
+    insertafter: '^discovery.seed_hosts'
+    line: 'discovery.type: single-node'
+  become: true
+
+
+
+# you don't need this step if you set value network.host to localhost above
+- name: set for ES => node.name 
+  lineinfile:
+    path: /etc/elasticsearch/elasticsearch.yml
+    insertafter: '^#node.name'
+    line: 'node.name: node-1'
+  become: true
+
+
+# if ES doesn't start after this step,, the on your host, not int ther container, execute command: $ sudo sysctl -w vm.max_map_count=262144
+# to verify that the value is set, execute command : $ sudo sysctl vm.max_map_count
+- name: start ED. Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
+  shell: nohup /etc/init.d/elasticsearch start &
+  args:
+    chdir: /
+  become: true
+
+
+- name: Make sure Elasticsearch is running before proceeding.
+  wait_for:
+    host: localhost
+    port: 9200
+    delay: 10
+    timeout: 60

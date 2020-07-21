@@ -1,0 +1,41 @@
+---
+# tasks file for role_prerequisites
+#
+#
+
+- name: Install java for servers who need java => elastic, and logstash on nginx
+  apt:
+    pkg:
+      - openjdk-8-jdk
+    state: present
+    update_cache: true
+  become: true
+  when: inventory_hostname=='elastic' or inventory_hostname=='nginx'
+
+
+- name: Install packages for all servers
+  apt:
+    pkg:
+      - wget
+      - gnupg
+      - apt-transport-https
+    state: present
+    update_cache: true
+  become: true
+ 
+
+- name: Add Elasticsearch apt key.
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+  become: true
+ 
+
+- name: Add Elasticsearch repository.
+  apt_repository:
+    repo: 'deb https://artifacts.elastic.co/packages/7.x/apt stable main'
+    state: present
+    update_cache: true
+  become: true
+ 
+

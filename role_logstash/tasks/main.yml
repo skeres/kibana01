@@ -1,0 +1,35 @@
+---
+# tasks file for role_logstash
+
+- name: install Logstatsh
+  apt:
+    name: logstash
+    update_cache: yes
+  become: true
+  
+
+# copy template file to look for nginx logs
+- name: Template a file to /etc/files.conf
+  template:
+    src: 01-local-dev.conf
+    dest: /etc/logstash/conf.d/01-local-dev.conf
+    owner: ugeek
+    mode: '0644'
+  become: true
+
+
+# set logstatsh as a service
+#- name: Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
+#  shell: update-rc.d logstash defaults
+#  become: true
+
+
+# start logstatsh
+#- name: start logstatsh
+#  shell: nohup service logstash start &
+#  become: true
+
+# start logstatsh
+- name: start logstatsh
+  shell: nohup /usr/share/logstash/bin/logstash --path.settings /etc/logstash/ -f /etc/logstash/conf.d/01-local-dev.conf &
+  become: true
