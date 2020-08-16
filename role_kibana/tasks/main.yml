@@ -6,8 +6,9 @@
   apt:
     name: kibana
     state: latest
-    update_cache: yes
-  become : true
+    #update_cache: yes
+  become: true
+  become_user: root
 
 
 # set custom file with link to elasticsearch server
@@ -15,8 +16,9 @@
   lineinfile:
     path: /etc/kibana/kibana.yml
     insertafter: '^#server.host'
-    line: 'server.host: "172.3.27.19"'
+    line: 'server.host: "{{ __ip_kibana }}"'
   become: true
+  become_user: root
 
 
 # set custom file with link to elasticsearch server
@@ -24,18 +26,21 @@
   lineinfile:
     path: /etc/kibana/kibana.yml
     insertafter: '^#elasticsearch.hosts'
-    line: 'elasticsearch.hosts: ["http://172.3.27.10:9200"]'
+    line: 'elasticsearch.hosts: ["http://{{ __ip_elastic }}:9200"]'
   become: true
+  become_user: root
 
 
 
 # set Kibana as a service
 - name: set Kibana as a service
-  shell: update-rc.d kibana defaults
+  shell: update-rc.d kibana defaults 95 10
   become: true
+  become_user: root
 
 
 # start Kibana
 - name: start Kibana
-  shell: nohup service kibana start > /root/start_kibana.log 2>&1 &
+  shell: nohup sudo -i service kibana start > /root/start_kibana.log 2>&1 &
   become: true
+  become_user: root

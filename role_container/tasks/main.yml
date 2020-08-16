@@ -1,17 +1,15 @@
 ---
 # tasks file for role_container
 #
-#    --no-recreate          If containers already exist, don't recreate them.  Incompatible with --force-recreate.
-#
 
 
 - name: Create a network with custom IPAM config
   docker_network:
     name: network_project
     ipam_config:
-      - subnet: 172.3.27.0/24
-        gateway: 172.3.27.1
-        iprange: 172.3.27.0/32
+      - subnet: "{{__root_network}}.0/24"
+        gateway: "{{__root_network}}.254"
+        
 
 - name: Create a custom image from ubuntu with user=ugeek and minimum packages
   docker_image:
@@ -31,9 +29,10 @@
     interactive: yes
     tty: yes
     recreate: no
+    hostname: elastichost
     networks:
       - name: network_project
-        ipv4_address: 172.3.27.10
+        ipv4_address: "{{ __ip_elastic }}"
 
 
 - name: Create a container for Nginx, based on custom image created above
@@ -45,9 +44,10 @@
     interactive: yes
     tty: yes
     recreate: no
+    hostname: nginxhost
     networks:
       - name: network_project
-        ipv4_address: 172.3.27.14
+        ipv4_address: "{{ __ip_nginx }}"
 
 
 - name: Create a container for Kibana, based on custom image created above
@@ -59,9 +59,10 @@
     interactive: yes
     tty: yes
     recreate: no
+    hostname: kibanahost
     networks:
       - name: network_project
-        ipv4_address: 172.3.27.19
+        ipv4_address: "{{ __ip_kibana }}"
 
 
 

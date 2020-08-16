@@ -36,6 +36,25 @@
   become: true
 
 
+# remove existing index files in /var/www/html
+- name: Remove files in /var/www/html
+  file:
+    path: /var/www/html/index*
+    state: absent
+
+
+# copy a custom index.html page with auto refresh to provide a stream of log to kibana
+- name: custom index page for nginx
+  template:
+    src: index.html
+    dest: /var/www/html/index.html
+    owner: root
+    mode: '0644'
+    backup: no
+  become: true
+
+
+
 # set nginx as a service
 - name: start Nginx. Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
   shell: update-rc.d nginx defaults

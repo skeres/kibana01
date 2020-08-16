@@ -1,18 +1,14 @@
 ---
 
 - hosts: localhost
-
   pre_tasks:
-          - shell: echo 'no tasks to run before roles'
-
+          - shell: echo 'no pre_tasks to run before roles'
   roles:
     - { role: role_container }
-
   tasks:
     - shell: echo 'no tasks to run after roles'
-
   post_tasks:
-    - shell: echo 'ansible jobs ended'
+    - shell: echo 'no post_tasks ansible jobs ended'
 
 
 - hosts: elastic_group

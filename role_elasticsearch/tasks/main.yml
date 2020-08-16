@@ -47,9 +47,29 @@
   become: true
 
 
-# if ES doesn't start after this step,, the on your host, not int ther container, execute command: $ sudo sysctl -w vm.max_map_count=262144
+# set Xms java memory for ES
+- name: set java memory for ES => Xms
+  lineinfile:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '^-Xms'
+    line: -Xms512m
+    backup: yes
+  become: true
+
+
+# set java Xmx memory for ES
+- name: set java memory for ES => Xmx
+  lineinfile:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '^-Xmx'
+    line: -Xmx512m
+    backup: no
+  become: true
+
+
+# if ES doesn't start after this step, then on your host, not int ther container, execute command: $ sudo sysctl -w vm.max_map_count=262144
 # to verify that the value is set, execute command : $ sudo sysctl vm.max_map_count
-- name: start ED. Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
+- name: start Elastic. Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
   shell: nohup /etc/init.d/elasticsearch start &
   args:
     chdir: /

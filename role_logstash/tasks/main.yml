@@ -18,6 +18,26 @@
   become: true
 
 
+# set Xms java memory for Logstash
+- name: set java memory for Logstash => Xms
+  lineinfile:
+    path: /etc/logstash/jvm.options
+    regexp: '^-Xms'
+    line: -Xms512m
+    backup: yes
+  become: true
+
+
+# set java Xmx memory for Logstash
+- name: set java memory for Logstash => Xmx
+  lineinfile:
+    path: /etc/logstash/jvm.options
+    regexp: '^-Xmx'
+    line: -Xmx512m
+    backup: no
+  become: true
+
+
 # set logstatsh as a service
 #- name: Execute the command in remote shell; nohup and background task because anible shutdown ssh connection before task is completed
 #  shell: update-rc.d logstash defaults
