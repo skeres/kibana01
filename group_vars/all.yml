@@ -1,0 +1,12 @@
+---
+#root network
+__root_network: "172.20.27"
+
+# ip assigned to elasticsearch server
+__ip_elastic: "{{ __root_network }}.10"
+
+# ip assigned to nginx server
+__ip_nginx: "{{ __root_network }}.14"
+
+# ip assigned to kibana server
+__ip_kibana: "{{ __root_network }}.19"
